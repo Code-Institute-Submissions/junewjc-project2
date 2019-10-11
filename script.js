@@ -20,9 +20,10 @@ queue()
 
         let ndx = crossfilter(suicideData);
         let all_dim = ndx.dimension(function(d) { return d; });
-        
+
         show_year_selector(ndx);
         show_total_no_of_suicides(ndx)
+        show_no_of_suicides_by_gender(ndx)
 
         dc.renderAll();
     });
@@ -56,26 +57,49 @@ function data_cleaning_countries_name(suicideData, countriesJson) {
 
 //Drop down menu to let user select a specific year
 function show_year_selector(ndx) {
-  let year_dim = ndx.dimension(dc.pluck('year'));
-  let year_group = year_dim.group();
+    let year_dim = ndx.dimension(dc.pluck('year'));
+    let year_group = year_dim.group();
 
-  dc.selectMenu("#year-selector")
-    .dimension(year_dim)
-    .group(year_group)
-    .title(function (d) {
-      return 'Year: ' + d.key;
-    });
+    dc.selectMenu("#year-selector")
+        .dimension(year_dim)
+        .group(year_group)
+        .title(function(d) {
+            return 'Year: ' + d.key;
+        });
 }
 
 
 //To show the total number of suicides
 function show_total_no_of_suicides(ndx) {
-  let total_no_of_suicides = ndx.groupAll().reduceSum(dc.pluck('suicides_100k'));
+    let total_no_of_suicides = ndx.groupAll().reduceSum(dc.pluck('suicides_100k'));
 
-  dc.numberDisplay("#suicides-figure")
-    .group(total_no_of_suicides)
-    .formatNumber(d3.format("d"))
-    .valueAccessor(function (d) {
-      return d;
-    })
-};
+    dc.numberDisplay("#suicides-figure")
+        .group(total_no_of_suicides)
+        .formatNumber(d3.format("d"))
+        .valueAccessor(function(d) {
+            return d;
+        });
+}
+
+
+//Pie chart to show the percentage and the no of suicides for each gender
+function show_no_of_suicides_by_gender(ndx) {
+    // Data dimension for gender
+    let gender_dim = ndx.dimension(dc.pluck('sex'));
+    //Data group for no of suicides per 100k people for each gender
+    let total_suicides_each_gender = gender_dim.group().reduceSum(dc.pluck('suicides_100k'));
+
+    dc.pieChart('#pie-chart')
+        .height(300)
+        .radius(300)
+        .transitionDuration(1500)
+        .dimension(gender_dim)
+        .group(total_suicides_each_gender)
+        .useViewBoxResizing(true)
+        .on('pretransition', function(chart) {
+            chart.selectAll('text.pie-slice').text(function(d) {
+                return d.data.key.charAt(0).toUpperCase() + d.data.key.substring(1) + ': ' + d.data.value + ' (' + dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2 * Math.PI) * 100) + '%)';
+            });
+        });
+
+}
