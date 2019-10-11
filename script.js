@@ -22,10 +22,19 @@ queue()
         let all_dim = ndx.dimension(function(d) { return d; });
 
         show_year_selector(ndx);
-        show_total_no_of_suicides(ndx)
-        show_no_of_suicides_by_gender(ndx)
-        show_countries_with_highest_suicide(ndx)
-        show_no_of_suicides_by_age_group(ndx)
+        show_total_no_of_suicides(ndx);
+        show_no_of_suicides_by_gender(ndx);
+        show_countries_with_highest_suicide(ndx);
+        show_no_of_suicides_by_age_group(ndx);
+
+        //To parse the dataset's year value into date format
+        let parse_date = d3.time.format("%Y").parse;
+        suicideData.forEach(function(d) {
+            d.year = parse_date("" + d.year);
+        });
+
+        show_no_of_suicides_by_year(ndx);
+
 
         dc.renderAll();
     });
@@ -171,6 +180,60 @@ function show_no_of_suicides_by_age_group(ndx) {
         .legend(dc.legend().x(100).y(20).itemHeight(13).gap(5))
         .xUnits(dc.units.ordinal)
         .xAxisLabel("Age Group")
+        .yAxisLabel("No. of Suicides per 100k people")
+        .yAxis().ticks(10);
+}
+
+
+//Stacked line chart to show the no of suicides(y-axis) for each year(x-axis), categorized by gender(stacked)
+function show_no_of_suicides_by_year(ndx) {
+    //Data dimension for year
+    let year_dim = ndx.dimension(function(d) {
+        return new Date(d.year);
+    });
+
+    //Data group for no of suicides per 100k people for each gender
+    let male_suicides_per_year = year_dim.group().reduceSum(function(d) {
+        if (d.sex == "male") {
+            return d.suicides_100k;
+        }
+        else {
+            return 0;
+        }
+    });
+
+    let female_suicides_per_year = year_dim.group().reduceSum(function(d) {
+        if (d.sex == "female") {
+            return d.suicides_100k;
+        }
+        else {
+            return 0;
+        }
+    });
+
+    //Setting min and max year for x-axis
+    let min_year = year_dim.bottom(1)[0].year;
+    let max_year = year_dim.top(1)[0].year;
+
+    dc.lineChart("#line-chart")
+        .renderArea(true)
+        .width(500)
+        .height(350)
+        .transitionDuration(1000)
+        .margins({ top: 30, right: 50, bottom: 40, left: 50 })
+        .dimension(year_dim)
+        .group(female_suicides_per_year, "Female")
+        .stack(male_suicides_per_year, "Male")
+        .elasticY(true)
+        .transitionDuration(500)
+        .x(d3.time.scale().domain([min_year, max_year]))
+        .renderHorizontalGridLines(true)
+        .renderVerticalGridLines(true)
+        .useViewBoxResizing(true)
+        .title(function(d) { return "Year " + d.key.getFullYear() + "\n No. of suicides: " + d.value; })
+        .legend(dc.legend().x(400).y(30).itemHeight(13).gap(5))
+        .brushOn(false)
+        .xAxisLabel("Year")
         .yAxisLabel("No. of Suicides per 100k people")
         .yAxis().ticks(10);
 }
