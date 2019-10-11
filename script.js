@@ -34,7 +34,7 @@ queue()
         });
 
         show_no_of_suicides_by_year(ndx);
-
+        show_country_map(ndx, countriesJson);
 
         dc.renderAll();
     });
@@ -74,6 +74,7 @@ function show_year_selector(ndx) {
     dc.selectMenu("#year-selector")
         .dimension(year_dim)
         .group(year_group)
+        .promptText('All Years')
         .title(function(d) {
             return 'Year: ' + d.key;
         });
@@ -236,4 +237,43 @@ function show_no_of_suicides_by_year(ndx) {
         .xAxisLabel("Year")
         .yAxisLabel("No. of Suicides per 100k people")
         .yAxis().ticks(10);
+}
+
+
+// Choropleth chart to show the number of suicides for each country
+function show_country_map(ndx, countriesJson) {
+
+    //Data dimension for country
+    let country_dim = ndx.dimension(dc.pluck('country'));
+    
+    //Data group for no of suicides per 100k people for each country
+    let total_suicide_by_country = country_dim.group().reduceSum(dc.pluck('suicides_100k'));
+
+    dc.geoChoroplethChart("#map-chart")
+        .width(1000)
+        .height(480)
+        .dimension(country_dim)
+        .group(total_suicide_by_country)
+        .colors(["#e0f3db", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#0868ac", "#084081"])
+        .colorAccessor(function(d) { return d; })
+        .colorDomain([1, 6000])
+        .overlayGeoJson(countriesJson["features"], "country", function(d) {
+            return d.properties.name;
+        })
+        .projection(d3.geo.mercator()
+            .center([10, 40])
+            .scale(110))
+        .useViewBoxResizing(true)
+        .title(function(d) {
+            if (d.value == undefined) {
+                return "Country: " + d.key +
+                    "\n" +
+                    "Data Unavailable";
+            }
+            else {
+                return "Country: " + d.key +
+                    "\n" +
+                    "Total Suicides: " + d.value;
+            }
+        });
 }

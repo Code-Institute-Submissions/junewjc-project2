@@ -63,3 +63,7 @@ body hr {
     padding: 5px 15px;
     position: relative;
 }
+
+#year-selector {
+    margin-left: 10px;
+}
