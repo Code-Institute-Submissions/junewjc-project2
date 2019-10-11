@@ -25,6 +25,7 @@ queue()
         show_total_no_of_suicides(ndx)
         show_no_of_suicides_by_gender(ndx)
         show_countries_with_highest_suicide(ndx)
+        show_no_of_suicides_by_age_group(ndx)
 
         dc.renderAll();
     });
@@ -128,4 +129,48 @@ function show_countries_with_highest_suicide(ndx) {
         .elasticX(true)
         .useViewBoxResizing(true)
         .xAxis().ticks(10).tickFormat(d3.format("s"));
+}
+
+
+//Stacked bar chart to show the no of suicides(y-axis) in each age group(x-axis), categorized by gender(stacked)
+function show_no_of_suicides_by_age_group(ndx) {
+    //Data dimension for age group
+    let age_dim = ndx.dimension(dc.pluck('age'));
+
+    //Data group for no of suicides per 100k people for each age group, categorized by gender
+    let male_suicides_per_age_group = age_dim.group().reduceSum(function(d) {
+        if (d.sex == "male") {
+            return d.suicides_100k;
+        }
+        else {
+            return 0;
+        }
+    });
+
+    let female_suicides_per_age_group = age_dim.group().reduceSum(function(d) {
+        if (d.sex == "female") {
+            return d.suicides_100k;
+        }
+        else {
+            return 0;
+        }
+    });
+
+    dc.barChart("#bar-chart")
+        .width(500)
+        .height(350)
+        .margins({ top: 30, right: 50, bottom: 40, left: 50 })
+        .dimension(age_dim)
+        .group(female_suicides_per_age_group, "Female")
+        .stack(male_suicides_per_age_group, "Male")
+        .elasticY(true)
+        .useViewBoxResizing(true)
+        .title(function(d) { return "Age Group: " + d.key + "\n No. of suicides: " + d.value; })
+        .x(d3.scale.ordinal())
+        .renderHorizontalGridLines(true)
+        .legend(dc.legend().x(100).y(20).itemHeight(13).gap(5))
+        .xUnits(dc.units.ordinal)
+        .xAxisLabel("Age Group")
+        .yAxisLabel("No. of Suicides per 100k people")
+        .yAxis().ticks(10);
 }
