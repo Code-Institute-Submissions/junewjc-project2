@@ -22,6 +22,7 @@ queue()
         let all_dim = ndx.dimension(function(d) { return d; });
         
         show_year_selector(ndx);
+        show_total_no_of_suicides(ndx)
 
         dc.renderAll();
     });
@@ -65,3 +66,16 @@ function show_year_selector(ndx) {
       return 'Year: ' + d.key;
     });
 }
+
+
+//To show the total number of suicides
+function show_total_no_of_suicides(ndx) {
+  let total_no_of_suicides = ndx.groupAll().reduceSum(dc.pluck('suicides_100k'));
+
+  dc.numberDisplay("#suicides-figure")
+    .group(total_no_of_suicides)
+    .formatNumber(d3.format("d"))
+    .valueAccessor(function (d) {
+      return d;
+    })
+};
