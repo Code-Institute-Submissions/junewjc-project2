@@ -2,6 +2,7 @@
 /* global d3 */
 /* global dc */
 /* global _ */
+/* global crossfilter */
 
 queue()
 
@@ -17,7 +18,12 @@ queue()
 
         data_cleaning_countries_name(suicideData, countriesJson);
 
+        let ndx = crossfilter(suicideData);
+        let all_dim = ndx.dimension(function(d) { return d; });
         
+        show_year_selector(ndx);
+
+        dc.renderAll();
     });
 
 
@@ -45,4 +51,17 @@ function data_cleaning_countries_name(suicideData, countriesJson) {
             }
         });
     }
+}
+
+//Drop down menu to let user select a specific year
+function show_year_selector(ndx) {
+  let year_dim = ndx.dimension(dc.pluck('year'));
+  let year_group = year_dim.group();
+
+  dc.selectMenu("#year-selector")
+    .dimension(year_dim)
+    .group(year_group)
+    .title(function (d) {
+      return 'Year: ' + d.key;
+    });
 }
