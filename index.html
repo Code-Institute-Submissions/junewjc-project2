@@ -9,13 +9,115 @@
     <title>Data Visualization Dashboard</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.min.css" type="text/css" />
-    <link href="keen-dashboard.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
 <body>
+    <div class="navbar navbar-dark bg-warning sticky-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Suicide Rate Worldwide (Year 1985 - 2016)</a>
+                <a id='year-selector'>  
+    </a>
+                <a class="reset" href="javascript:dc.filterAll();dc.renderAll();">Reset</a>
+                <span class="reset" style="display: none;"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-md-3 chart">
+                <div class="row">
+                    <!-- Counter -->
+                    <div class="col-md-12 chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Total No of Suicides (per 100k people)
+                            </div>
+                            <div class="chart-stage">
+                                <div id="suicides-figure"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pie Chart -->
+                    <div class="col-md-12 chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Suicide Rate by Gender
+                            </div>
+                            <div class="chart-stage">
+                                <div id="pie-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Row chart -->
+                    <div class="col-md-12 chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Top 10 Countries with the Highest Suicide Rate
+                            </div>
+                            <div class="chart-stage">
+                                <div id="row-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-9 chart">
+                <div class="row">
+
+                    <!-- Bar chart -->
+                    <div class="col-md-6 chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Suicide Rate by Age Group
+                            </div>
+                            <div class="chart-stage">
+                                <div id="bar-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Line Chart -->
+                    <div class="col-md-6 chart">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Suicide Rate by Year
+                            </div>
+                            <div class="chart-stage">
+                                <div id="line-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Chart -->
+                    <div class="col-md-12 d-none d-md-block chart" style="margin-bottom:10px;">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Suicide Rate Worldwide
+                            </div>
+                            <div class="chart-stage">
+                                <div id="map-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
