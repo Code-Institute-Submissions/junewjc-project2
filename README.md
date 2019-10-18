@@ -47,17 +47,17 @@ Javascript
 
 [Bootstrap (3.3.7)](https://getbootstrap.com/)
 
-[JQuery] (https://jquery.com/)
+[JQuery](https://jquery.com/)
 
-[D3.js] (https://d3js.org/)
+[D3.js](https://d3js.org/)
 
-[Dc.js] (https://dc-js.github.io/dc.js/)
+[Dc.js](https://dc-js.github.io/dc.js/)
 
-[Crossfilter.js] (https://square.github.io/crossfilter/)
+[Crossfilter.js](https://square.github.io/crossfilter/)
 
-[Queue.js] (https://github.com/d3/d3-queue)
+[Queue.js](https://github.com/d3/d3-queue)
 
-[Lodash.js] (https://lodash.com/)
+[Lodash.js](https://lodash.com/)
 
 
 ## Testing
