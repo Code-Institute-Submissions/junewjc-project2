@@ -107,6 +107,7 @@ function show_no_of_suicides_by_gender(ndx) {
         .transitionDuration(1500)
         .dimension(gender_dim)
         .group(total_suicides_each_gender)
+        .ordinalColors(['#67a9cf', '#fa9fb5'])
         .useViewBoxResizing(true)
         .on('pretransition', function(chart) {
             chart.selectAll('text.pie-slice').text(function(d) {
@@ -133,6 +134,7 @@ function show_countries_with_highest_suicide(ndx) {
         .dimension(country_dim)
         .group(total_suicide_by_country)
         .data(function(d) { return d.top(top_countries); })
+        .ordinalColors(["#084099","#084080", "#0868af","#0868aa", "#2b8cbf","#2b8cba", "#4eb3d3","#4eb3d3", "#7bccc4", "#a8ddb5"])
         .renderLabel(true)
         .gap(1)
         .title(function(d) { return "No. of suicides: " + d.value; })
@@ -173,6 +175,7 @@ function show_no_of_suicides_by_age_group(ndx) {
         .dimension(age_dim)
         .group(female_suicides_per_age_group, "Female")
         .stack(male_suicides_per_age_group, "Male")
+        .ordinalColors(['#fa9fb5', '#67a9cf'])
         .elasticY(true)
         .useViewBoxResizing(true)
         .title(function(d) { return "Age Group: " + d.key + "\n No. of suicides: " + d.value; })
@@ -225,6 +228,7 @@ function show_no_of_suicides_by_year(ndx) {
         .dimension(year_dim)
         .group(female_suicides_per_year, "Female")
         .stack(male_suicides_per_year, "Male")
+        .ordinalColors(['#fa9fb5', '#67a9cf'])
         .elasticY(true)
         .transitionDuration(500)
         .x(d3.time.scale().domain([min_year, max_year]))
@@ -254,7 +258,7 @@ function show_country_map(ndx, countriesJson) {
         .height(480)
         .dimension(country_dim)
         .group(total_suicide_by_country)
-        .colors(["#e0f3db", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#0868ac", "#084081"])
+        .colors(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#43a2ca", "#0868ac"])
         .colorAccessor(function(d) { return d; })
         .colorDomain([1, 6000])
         .overlayGeoJson(countriesJson["features"], "country", function(d) {

@@ -12,6 +12,10 @@ body hr {
     padding-right: 0;
 }
 
+.bg-warning {
+    background-color: #67CFC1 !important;
+}
+
 .navbar {
     padding: 0 10px;
     margin:0;
